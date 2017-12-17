@@ -1,0 +1,97 @@
+import sys
+from inspect import currentframe, getframeinfo
+
+
+input_val = sys.stdin.readlines()
+
+tree_struc = []
+for line in input_val:
+    tree_struc.append(line.strip().split(","))
+
+class Node(object):
+    def __init__(self,data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+def find_Node(root, val):
+    print "Find node called"
+    list_val = []
+    if root is not None:
+        list_val.append(root)
+    while len(list_val) > 0:
+        print len(list_val)
+        root = list_val.pop()
+        if root.data == val:
+            return root
+        if root.right is not None:
+            list_val.append(root.right)
+        if root.left is not None:
+            list_val.append(root.left)
+    return None
+
+
+    if root.data == val:
+        print "return root"
+        return root
+    if root.left:
+        return find_Node(root.left, val)
+    if root.right:
+        return find_Node(root.right, val)
+    raise Exception("Node not found")
+
+
+
+
+
+def addNode(root_val, row_val):
+    rootNode = Node(row_val[0])
+    if row[1] != '':
+        rootNode.left = Node(row_val[1])
+    if row[2] != '':
+        rootNode.right = Node(row_val[2])
+    if root_val is None:
+        root_val = rootNode
+    else:
+        # find the node where root needs to be Insert
+        # will be the node whose vaule matches row_val[0]
+        node_val = find_Node(root_val, row[0])
+        print "Found Node val"
+        print node_val.data
+        node_val.left = rootNode.left
+        node_val.right = rootNode.right
+    return root_val
+
+
+def print_tree(root):
+    frameinfo = getframeinfo(currentframe())
+    print frameinfo.lineno
+    if root is not None:
+        print root.data
+    if root.left:
+        print_tree(root.left)
+    if root.right:
+        print_tree(root.right)
+
+root = None
+for row in tree_struc:
+    frameinfo = getframeinfo(currentframe())
+    print frameinfo.lineno
+    print row
+    if row is None:
+        print "Row is None"
+    root = addNode(root, row)
+
+
+print "This is the tree"
+print_tree(root)
+
+def find_min_depth(root_val):
+    if root_val is None:
+        return 0
+    if root_val.left is None and root_val.right is None:
+        return 0
+    else:
+        return min(1 + find_min_depth(root_val.left),1 + find_min_depth(root_val.right))
+
+print find_min_depth(root)
